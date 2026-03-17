@@ -1,16 +1,21 @@
 package org.example.tests;
 
+import org.example.data.JsonDataReader;
+import org.example.data.LoginData;
 import org.example.pages.LoginPage;
 import org.example.utils.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.util.List;
+
 public class LoginTest {
 
     private WebDriver driver;
     private LoginPage loginPage;
-    String URL = "https://practice.qabrains.com/ecommerce/login";
+    private final String URL = "https://practice.qabrains.com/ecommerce/login";
+
     @BeforeClass
     public void setUp() {
         // Initialize the driver
@@ -19,49 +24,54 @@ public class LoginTest {
         // Open the login page
         driver.get(URL);
 
-        // Initialize the LoginPage object
+        // Initialize LoginPage object
         loginPage = new LoginPage(driver);
     }
 
     // ------------------------
-    // Positive Test
+    // DataProvider that reads JSON
     // ------------------------
-    @Test(priority = 2)
-    public void testValidLogin() {
-        String email = "test@qabrains.com";
-        String password = "Password123";
+    @DataProvider(name = "loginData")
+    public Object[][] loginDataProvider() throws Exception {
+
+        List<LoginData> dataList = JsonDataReader.getLoginData();
+        Object[][] data = new Object[dataList.size()][3];
+
+        for (int i = 0; i < dataList.size(); i++) {
+            LoginData d = dataList.get(i);
+            data[i][0] = d.email;
+            data[i][1] = d.password;
+            data[i][2] = d.expected;
+        }
+
+        return data;
+    }
+
+    // ------------------------
+    // Single test for all login scenarios
+    // ------------------------
+    @Test(dataProvider = "loginData")
+    public void testLogin(String email, String password, boolean expected) {
 
         loginPage.login(email, password);
 
-        // Assert login success
-        Assert.assertTrue(loginPage.isLoginSuccessful(), "Login should succeed with valid credentials");
+        boolean actual = loginPage.isLoginSuccessful();
+
+        Assert.assertEquals(actual, expected, "Login result mismatch for: " + email);
     }
-
-    // ------------------------
-    // Negative Test
-    // ------------------------
-    @Test(priority = 1)
-    public void testInvalidLogin() {
-        String invalidEmail = "wrong@qabrains.com";
-        String invalidPassword = "WrongPass123";
-
-        loginPage.login(invalidEmail, invalidPassword);
-
-        // Assert login failed
-        Assert.assertFalse(loginPage.isLoginSuccessful(), "Login should fail with invalid credentials");
-    }
-
 
     // ------------------------
     // Reset page after each test
     // ------------------------
     @AfterMethod
-    public void afterEachTest() {
-        driver.get(URL); // reset page for next test
+    public void resetDriver() {
+        WebDriverManager.quitDriver();         // close browser
+        driver = WebDriverManager.getDriver(); // open new browser
+        driver.get(URL);
+        loginPage = new LoginPage(driver);     // צור מחדש את ה-Page Object
     }
-
     // ------------------------
-    // Close driver after all tests
+    // Quit driver after all tests
     // ------------------------
     @AfterClass
     public void tearDown() {
