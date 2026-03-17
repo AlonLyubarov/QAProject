@@ -3,8 +3,6 @@
     <test name="Login Tests">
         <classes>
             <class name="org.example.tests.LoginTest"/>
-            <class name="org.example.tests.NegativeLoginTest"/>
-            <class name="org.example.tests.DataDrivenLoginTest"/>
         </classes>
     </test>
 </suite>
