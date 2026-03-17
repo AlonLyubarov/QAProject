@@ -68,7 +68,7 @@ public class LoginTest {
         WebDriverManager.quitDriver();         // close browser
         driver = WebDriverManager.getDriver(); // open new browser
         driver.get(URL);
-        loginPage = new LoginPage(driver);     // צור מחדש את ה-Page Object
+        loginPage = new LoginPage(driver);
     }
     // ------------------------
     // Quit driver after all tests
