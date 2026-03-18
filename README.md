@@ -120,16 +120,18 @@ This will run all tests and then open the Allure report in your browser.
 
 ##  Allure Report Structure
 
-Epic: Authentication
-└── Feature: Login
-    └── Story: Login with various credentials
-        └── testLogin PASS / FAIL
-             ├── Parameters:
-             │    ├── Email: user@example.com
-             │    └── Expected Result: true/false
-             ├── Step 1: Login with email: user@example.com
-             ├── Step 2: Check if login was successful
-             └── 📸 Screenshot (only on failure)
+| Level | Name |
+|---|---|
+| Epic | Authentication |
+| Feature | Login |
+| Story | Login with various credentials |
+| Test | testLogin - PASS / FAIL |
+| Parameter | Email: user@example.com |
+| Parameter | Expected Result: true / false |
+| Step 1 | Login with email: user@example.com |
+| Step 2 | Check if login was successful |
+| On Failure | Screenshot automatically attached |
+
 
 ---
 
