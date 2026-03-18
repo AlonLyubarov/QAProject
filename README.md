@@ -123,7 +123,7 @@ This will run all tests and then open the Allure report in your browser.
 Epic: Authentication
 └── Feature: Login
     └── Story: Login with various credentials
-        └── testLogin ✅ / ❌
+        └── testLogin PASS / FAIL
              ├── Parameters:
              │    ├── Email: user@example.com
              │    └── Expected Result: true/false
