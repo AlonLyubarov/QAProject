@@ -1,5 +1,6 @@
 package org.example.tests;
 
+import io.qameta.allure.*;
 import org.example.data.JsonDataReader;
 import org.example.data.LoginData;
 import org.example.pages.LoginPage;
@@ -7,9 +8,10 @@ import org.example.utils.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
-
 import java.util.List;
 
+@Epic("Authentication")        // ← top level group
+@Feature("Login")              // ← feature inside the epic
 public class LoginTest {
 
     private WebDriver driver;
@@ -20,10 +22,8 @@ public class LoginTest {
     public void setUp() {
         // Initialize the driver
         driver = WebDriverManager.getDriver();
-
         // Open the login page
         driver.get(URL);
-
         // Initialize LoginPage object
         loginPage = new LoginPage(driver);
     }
@@ -51,12 +51,16 @@ public class LoginTest {
     // Single test for all login scenarios
     // ------------------------
     @Test(dataProvider = "loginData")
+    @Story("Login with various credentials")       // ← story inside feature
+    @Severity(SeverityLevel.CRITICAL)              // ← how important is this test
+    @Description("Tests login with valid and invalid credentials from JSON")  // ← description
     public void testLogin(String email, String password, boolean expected) {
+        Allure.parameter("Email", email);                    // ← shows email in report
+        Allure.parameter("Expected Result", expected);       // ← shows expected in report
+
 
         loginPage.login(email, password);
-
         boolean actual = loginPage.isLoginSuccessful();
-
         Assert.assertEquals(actual, expected, "Login result mismatch for: " + email);
     }
 

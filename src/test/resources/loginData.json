@@ -1,5 +1,5 @@
 [
-  { "email": "test@qabrains.com", "password": "Password123", "expected": true },
+  { "email": "test@qabrains.com", "password": "Password123", "expected": false },
   { "email": "practice@qabrains.com", "password": "Password123", "expected": true },
   { "email": "student@qabrains.com", "password": "Password123", "expected": true },
   { "email": "wrongemail@qabrains.com", "password": "Password123", "expected": false },

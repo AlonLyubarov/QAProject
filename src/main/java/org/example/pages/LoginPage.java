@@ -1,5 +1,6 @@
 package org.example.pages;
 
+import io.qameta.allure.Step;
 import org.example.base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +16,6 @@ public class LoginPage extends BasePage {
     private final By emailInput = By.id("email");
     private final By passwordInput = By.id("password");
     private final By loginButton = By.xpath("//button[text()='Login']");
-
     // Error / notification message
     private final By notification = By.cssSelector("section[aria-label='Notifications alt+T']");
 
@@ -30,6 +30,7 @@ public class LoginPage extends BasePage {
     // ------------------------
     // Perform login
     // ------------------------
+    @Step("Login with email: {email}")
     public void login(String email, String password) {
         sendKeys(emailInput, email);
         sendKeys(passwordInput, password);
@@ -39,6 +40,7 @@ public class LoginPage extends BasePage {
     // ------------------------
     // Check login result (PROFESSIONAL WAY)
     // ------------------------
+    @Step("Check if login was successful")      // ← shows in report as a step
     public boolean isLoginSuccessful() {
 
         try {
