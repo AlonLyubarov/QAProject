@@ -1,65 +1,54 @@
 package org.example.pages;
 
+import org.example.base.BasePage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 
-public class LoginPage {
-    private WebDriver driver;
+public class LoginPage extends BasePage {
 
+    // ------------------------
+    // Locators
+    // ------------------------
+    private final By emailInput = By.id("email");
+    private final By passwordInput = By.id("password");
+    private final By loginButton = By.xpath("//button[text()='Login']");
+
+    // Error / notification message
+    private final By notification = By.cssSelector("section[aria-label='Notifications alt+T']");
+
+
+    // ------------------------
+    // Constructor
+    // ------------------------
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    public void enterEmail(String email) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement emailField = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("email")) //
-        );
-        emailField.sendKeys(email);
-    }
-
-    public void enterPassword(String password) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement passwordField = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("password")) //
-        );
-        passwordField.sendKeys(password);
-    }
-
-    public void clickLogin() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement loginButton = wait.until(
-                ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Login')]"))
-        );
-        loginButton.click();
-    }
-
-
+    // ------------------------
+    // Perform login
+    // ------------------------
     public void login(String email, String password) {
-        enterEmail(email);
-        enterPassword(password);
-        clickLogin();
+        sendKeys(emailInput, email);
+        sendKeys(passwordInput, password);
+        clickElement(loginButton);
     }
 
-
+    // ------------------------
+    // Check login result (PROFESSIONAL WAY)
+    // ------------------------
     public boolean isLoginSuccessful() {
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement notification = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(By.cssSelector("section[aria-label='Notifications alt+T']"))
-            );
 
-            String msg = notification.getText();
-            // If the notification contains "invalid" or "wrong", login failed
-            if (msg.toLowerCase().contains("neither") || msg.toLowerCase().contains(" incorrect")) {
-                return false; // login failed
+        try {
+            String msg = getNotificationText(notification).toLowerCase();
+            if (msg.contains("invalid") ||
+                    msg.contains("incorrect") ||
+                    msg.contains("wrong") ||
+                    msg.contains("neither")) {
+
+                return false;
             }
             return true; // no error → login likely successful
         } catch (Exception e) {
