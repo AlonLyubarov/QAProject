@@ -162,7 +162,3 @@ The following will be added in future commits:
 - [ ] Multi-browser support in WebDriverManager
 - [ ] Parallel test execution
 
----
-
-## 👤 Author
-Built as a learning project to practice QA automation best practices.
